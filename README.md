@@ -1,12 +1,29 @@
+
+# Angular Version
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.6.
+
 # Quiz
 Instalar los modulos:
 ```
 npm install
 ```
 
-# Angular Version
+# Firebase config in environment.ts:
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.6.
+```
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: "",
+    authDomain: "quizz-xxxx.firebaseapp.com",
+    projectId: "quizz-xxxx",
+    storageBucket: "quizz-xxxx.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:xxxxxxxxxx:web:xxxxxxxxxx"
+  }
+};
+```
 
 ## Development server
 
@@ -20,3 +37,4 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 `https://www.w3.org/TR/css-flexbox/`
 `https://getbootstrap.com/docs/4.6`
 `https://firebase.google.com/`
+`https://www.npmjs.com/package/ngx-toastr`

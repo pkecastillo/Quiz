@@ -1,5 +1,9 @@
+import { ErrorService } from './../../../services/error.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth'
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -8,8 +12,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterComponent implements OnInit {
   registrarForm: FormGroup
+  loading = false
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private toastr: ToastrService,
+    private _errorService: ErrorService
+    ) {
     this.registrarForm = this.fb.group({
       usuario: ['',[Validators.required, Validators.email]],
       password: ['',[Validators.required, Validators.minLength(6)]],
@@ -21,7 +32,23 @@ export class RegisterComponent implements OnInit {
   }
 
   registrar(){
-    console.log(this.registrarForm);
+    // console.log(this.registrarForm);
+    const usuario = this.registrarForm.get('usuario')?.value
+    const password = this.registrarForm.get('password')?.value
+    // console.log(usuario)
+    // console.log(password)
+    this.loading =true
+    this.afAuth.createUserWithEmailAndPassword(usuario,password).then(respuesta => {
+      // console.log(respuesta);
+      respuesta.user?.sendEmailVerification()
+      this.toastr.success('Enviamos un correo electronico para verificación', 'Usuario registrado!');
+      this.router.navigate(['/usuario'])
+    }).catch(error => {
+      // console.log(error);
+      this.registrarForm.reset()
+      this.loading = false
+      this.toastr.error(this._errorService.error(error.code), 'Opss, Error');
+    })
   }
 
   checkPassword(group: FormGroup): any{
